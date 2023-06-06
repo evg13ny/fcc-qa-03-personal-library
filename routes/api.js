@@ -58,7 +58,7 @@ module.exports = app => {
     .delete((req, res) => {
       //if successful response will be 'complete delete successful'
 
-      Book.remove({}, (err, data) => {
+      Book.deleteOne({}, (err, data) => {
         if (err || !data) {
           res.send('could not remove');
         } else {
@@ -125,5 +125,4 @@ module.exports = app => {
         }
       });
     });
-
 };

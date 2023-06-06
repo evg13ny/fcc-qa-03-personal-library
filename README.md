@@ -1,3 +1,7 @@
 # Personal Library
 
-This is the boilerplate for the Personal Library project. Instructions for building your project can be found at https://www.freecodecamp.org/learn/quality-assurance/quality-assurance-projects/personal-library
+written using Express, MongoDB and Node.js.
+
+Tested with Mocha and Chai.
+
+Build your library, comment books [here](https://boilerplate-project-library.evg13ny.repl.co).
