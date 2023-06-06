@@ -10,10 +10,10 @@
 
 const Book = require('../models').Book;
 
-module.exports = function (app) {
+module.exports = app => {
 
   app.route('/api/books')
-    .get(function (req, res) {
+    .get((req, res) => {
       //response will be array of book objects
       //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
 
@@ -21,7 +21,7 @@ module.exports = function (app) {
         if (!data) {
           res.json([]);
         } else {
-          const formatData = data.map((book) => {
+          const formattedData = data.map((book) => {
             return {
               _id: book._id,
               title: book.title,
@@ -29,7 +29,8 @@ module.exports = function (app) {
               commentcount: book.comments.length
             }
           });
-          res.json(formatData);
+
+          res.json(formattedData);
         }
       });
     })
@@ -54,7 +55,7 @@ module.exports = function (app) {
       });
     })
 
-    .delete(function (req, res) {
+    .delete((req, res) => {
       //if successful response will be 'complete delete successful'
 
       Book.remove({}, (err, data) => {
@@ -66,10 +67,8 @@ module.exports = function (app) {
       });
     });
 
-
-
   app.route('/api/books/:id')
-    .get(function (req, res) {
+    .get((req, res) => {
       let bookid = req.params.id;
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
 
@@ -87,7 +86,7 @@ module.exports = function (app) {
       });
     })
 
-    .post(function (req, res) {
+    .post((req, res) => {
       let bookid = req.params.id;
       let comment = req.body.comment;
       //json res format same as .get
@@ -97,23 +96,24 @@ module.exports = function (app) {
         return;
       }
 
-      if (!data) {
-        res.send('no book exists');
-      } else {
-        data.comments.push(comment);
-
-        data.save((err, bookdata) => {
-          res.json({
-            _id: bookdata._id,
-            title: bookdata.title,
-            comments: bookdata.comments,
-            commentcount: bookdata.comments.length
+      Book.findById(bookid, (err, data) => {
+        if (!data) {
+          res.send('no book exists');
+        } else {
+          data.comments.push(comment);
+          data.save((err, bookData) => {
+            res.json({
+              _id: bookData._id,
+              title: bookData.title,
+              comments: bookData.comments,
+              commentcount: bookData.comments.length
+            });
           });
-        });
-      }
+        }
+      });
     })
 
-    .delete(function (req, res) {
+    .delete((req, res) => {
       let bookid = req.params.id;
       //if successful response will be 'delete successful'
 
